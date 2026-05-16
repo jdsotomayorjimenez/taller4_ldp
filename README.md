@@ -1,66 +1,62 @@
 # Taller 4 - Prolog #3 - Narrativa de nivel para misiones
 
-## 1. Título y descripción
+Este código en Prolog modela un sistema básico tipo RPG, donde existen personajes, misiones, niveles, experiencia, inventarios y requisitos. A partir de esta información, el programa permite validar si un personaje o grupo puede participar en una misión y generar reportes narrativos según las condiciones del juego. Se aplican conceptos propios de Prolog como hechos, reglas, listas, recursividad, acumuladores, comparación aritmética, backtracking y construcción de mensajes.
 
-Este taller corresponde a una continuación del trabajo con el lenguaje de programación lógica Prolog, aplicado a la construcción de una narrativa de nivel para misiones dentro de un entorno de juego. El código modela personajes, misiones, inventarios y requisitos, y permite inferir si un personaje o un grupo puede completar una misión según su nivel o su experiencia acumulada. Se implementaron predicados para calcular experiencia de forma recursiva, consultar inventarios mediante listas, comparar valores, conjugar acciones y generar reportes narrativos, aplicando conceptos como hechos, reglas, unificación, comparación aritmética, recursividad, acumuladores, listas, predicados integrados y control del backtracking.
+## Ejercicios implementados
 
-## 2. Ejercicios implementados
+### Base de conocimiento del RPG
 
-### Base de conocimiento de personajes, misiones, inventarios y requisitos
+El programa define los datos principales del juego mediante hechos. Se representan personajes con sus características, misiones con dificultad y recompensa, inventarios de los personajes y objetos requeridos para ciertas misiones. Esta información sirve como base para que las reglas puedan realizar consultas y generar conclusiones.
 
-Esta sección define los hechos principales del dominio del taller. Los predicados `personaje/3`, `mision/4`, `inventario/2` y `requiere/2` almacenan la información necesaria para representar personajes con nivel y vida, misiones con dificultad y recompensa, objetos disponibles en el inventario y objetos requeridos por ciertas misiones. Esta base de conocimiento permite que las reglas posteriores consulten datos concretos mediante unificación.
+**Nota:** esta parte usa hechos declarativos para construir la base lógica del programa.
 
-**Nota:** esta parte se basa en hechos declarativos y sirve como punto de partida para las inferencias del programa.
+### Validación de misiones e inventarios
 
-### Verificación de aceptación de misiones y consulta de objetos requeridos
+El código permite verificar si un personaje puede aceptar una misión comparando su nivel con la dificultad requerida. También permite revisar si un personaje posee determinado objeto dentro de su inventario, utilizando listas y predicados integrados de Prolog.
 
-El predicado `puede_aceptar/2` determina si un personaje puede aceptar una misión comparando su nivel con la dificultad de la misión mediante el operador relacional `>=`. Además, `tiene_requerido/2` consulta si un personaje posee un objeto determinado dentro de su inventario usando `member/2` sobre una lista.
+**Nota:** se trabaja con comparación de valores y búsqueda dentro de listas mediante `member/2`.
 
-**Nota:** se aplican comparación aritmética y procesamiento de listas con un predicado integrado de Prolog.
+### Cálculo de experiencia
 
-### Cálculo recursivo de experiencia acumulada
+Se implementan predicados para calcular experiencia acumulada de forma recursiva. Esta lógica permite obtener valores de XP a partir del nivel de los personajes o de los requisitos asociados a una misión.
 
-El predicado `xp_acumulada/2` calcula la experiencia total acumulada a partir de un número de misiones o niveles. La regla usa un caso base para `0` y un paso recursivo que reduce el valor de `N` hasta llegar al caso base, acumulando `30 * N` en cada retorno de la recursión.
+**Nota:** se usa recursividad directa con caso base y evaluación aritmética mediante `is/2`.
 
-**Nota:** esta sección evidencia recursividad directa, uso de caso base, instanciación previa con `is/2` y evaluación aritmética.
+### Comparación y balance de personajes
 
-### Comparación, unificación y balance de personajes
+El programa incluye reglas para comparar personajes que tienen el mismo nivel y para verificar si un personaje está balanceado según su cantidad de vida. Esta sección permite aplicar condiciones lógicas y aritméticas sobre los datos de los personajes.
 
-El predicado `mismo_nivel/2` identifica personajes que tienen exactamente el mismo nivel, evitando que el mismo personaje se compare consigo mismo mediante `\==`. Por su parte, `es_balanceado/1` valida si la vida de un personaje es exactamente `100` usando comparación aritmética con `=:=`.
+**Nota:** se diferencian operaciones de comparación lógica, desigualdad entre términos y comparación numérica.
 
-**Nota:** se diferencian conceptos de unificación, desigualdad estricta entre términos y comparación aritmética.
+### Fusión de inventarios
 
-### Procesamiento de listas para fusión de inventarios
+Se implementó una regla para unir los inventarios de dos personajes en una sola lista usando `append/3`. Esto permite representar un equipo combinado con los objetos de ambos integrantes.
 
-El predicado `fusionar_equipo/3` obtiene los inventarios de dos personajes y los combina en una sola lista mediante `append/3`. Esto permite formar un equipo fusionado con los objetos de ambos personajes.
-
-**Nota:** se utiliza manipulación de listas y se conserva el orden de los elementos de los inventarios originales.
+**Nota:** se aplica manipulación de listas en Prolog.
 
 ### Conjugación de acciones narrativas
 
-Esta sección define los predicados `tiempo/1`, `persona/1`, `numero/1` y `ser/4` para representar una base simple de conjugaciones del verbo `ser`. El predicado `conjugar_accion/5` valida tiempo, persona y número, y luego usa una estructura condicional para devolver la conjugación correspondiente cuando el verbo recibido es `"ser"`; en caso contrario, devuelve el verbo original.
+El taller incluye predicados para manejar tiempo, persona, número y conjugaciones simples del verbo `ser`. Estos se usan para construir mensajes narrativos más naturales dentro de los reportes.
 
-**Nota:** se aplica una estructura condicional con `->` y `;`, además de backtracking cuando se consultan combinaciones posibles con variables libres.
+**Nota:** se emplean reglas condicionales y validación de combinaciones gramaticales.
 
 ### Generación de reporte narrativo individual
 
-El predicado `generar_reporte/3` construye un mensaje narrativo para un personaje y una misión. Primero valida que el personaje pueda aceptar la misión, luego obtiene el nombre y la experiencia de recompensa, conjuga el verbo `ser` en tercera persona singular y finalmente une todos los fragmentos del mensaje con `atomic_list_concat/3`.
+El programa construye reportes narrativos para un personaje y una misión. Para esto, primero valida si el personaje puede aceptar la misión, luego obtiene los datos necesarios de la base de conocimiento y finalmente genera un mensaje usando concatenación de átomos.
 
-**Nota:** combina inferencia lógica, consulta de hechos, reutilización de predicados y construcción de texto.
+**Nota:** esta sección integra validación lógica, consulta de hechos y generación de texto.
 
-### Generación de reporte narrativo grupal por experiencia acumulada
+### Generación de reportes grupales
 
-El enfoque principal de reportes grupales calcula si un grupo puede completar una misión con base en experiencia acumulada. `xp_personaje/2` calcula la experiencia asociada al nivel de cada personaje, `xp_total_grupo/2` inicia el cálculo total del grupo, `xp_total_grupo/3` realiza la acumulación recursiva, `xp_requerida_mision/2` calcula la experiencia requerida por la dificultad de la misión y `grupo_puede_por_xp/2` compara ambas cantidades. Finalmente, `generar_reporte_grupo/3` produce un mensaje narrativo con los nombres del grupo, la experiencia total, la experiencia requerida y el premio de la misión.
+El ejercicio final trabaja con una lista de personajes y se resolvió usando dos enfoques.
 
-**Nota:** esta sección destaca el uso de recursividad con acumulador y composición de reglas para resolver una validación grupal.
+El enfoque principal calcula la XP acumulada de todos los personajes del grupo. Para esto, se obtiene la experiencia asociada a cada personaje, se suma la XP total del equipo y luego se compara con la XP requerida por la misión. Si la experiencia acumulada del grupo es suficiente, el reporte indica que el equipo puede completar la misión.
 
-### Generación de reporte grupal con modos de validación
+El segundo enfoque revisa jugador por jugador. En este caso, no se suma la experiencia total del grupo, sino que se verifica individualmente si cada personaje tiene el nivel necesario para aceptar la misión. Con esta lógica se puede determinar si algún personaje cumple con el requisito o si todos los integrantes del grupo están preparados.
 
-El enfoque secundario permite evaluar grupos con dos modos: `alguno` y `todos`. El predicado `alguno_puede/2` verifica si al menos un personaje del grupo puede aceptar la misión, mientras que `todos_pueden/2` exige que todos los integrantes la puedan aceptar. Con estos resultados, `generar_reporte_grupo_v1/4` genera un mensaje narrativo dependiendo del modo solicitado.
+**Nota:** la diferencia principal entre ambos enfoques es que el primero evalúa la fuerza del grupo como conjunto mediante XP acumulada, mientras que el segundo evalúa a cada personaje de manera individual según su nivel.
 
-**Nota:** `alguno_puede/2` usa recursividad y corte (`!`) para detener la búsqueda cuando encuentra el primer personaje válido; `todos_pueden/2` usa recursividad para validar todos los elementos de la lista.
-
-## 3. Tabla de predicados implementados
+## Tabla de predicados implementados
 
 | Predicado | Aridad | Descripción |
 |---|---:|---|
@@ -90,30 +86,35 @@ El enfoque secundario permite evaluar grupos con dos modos: `alguno` y `todos`. 
 | `todos_pueden` | 2 | Regla que verifica si todos los integrantes de un grupo pueden aceptar una misión. |
 | `generar_reporte_grupo_v1` | 4 | Regla que genera un reporte grupal según el modo `alguno` o `todos`. |
 
-## 4. Capturas de ejecución
+## Capturas de ejecución
 
 #### Captura 1 — Validación de experiencia acumulada, aceptación de misión e inventario requerido
+
 ![Captura 1](capturas/1.png)
 
 #### Captura 2 — Error por comparación aritmética con variable no instanciada y corrección con `is/2`
+
 ![Captura 2](capturas/2.png)
 
 #### Captura 3 — Fusión de inventarios, conjugación verbal, reporte individual y comparaciones de igualdad
+
 ![Captura 3](capturas/3.png)
 
 #### Captura 4 — Reportes grupales por experiencia acumulada para misiones `m2` y `m3`
+
 ![Captura 4](capturas/4.png)
 
 #### Captura 5 — Reporte grupal con modos `alguno` y `todos`
+
 ![Captura 5](capturas/5.png)
 
-## 5. Archivos del repositorio
+## Archivos del repositorio
 
 | Archivo | Descripción |
 |---|---|
-| `README.md` | Documento principal del repositorio con la descripción del taller, ejercicios, predicados, capturas y archivos. |
+| `README.md` | Documento principal del repositorio con la descripción del código, ejercicios implementados, predicados, capturas y archivos. |
 | `taller4.pl` | Archivo fuente en Prolog que contiene la base de conocimiento, reglas de inferencia, cálculo de experiencia y generación de reportes narrativos. |
-| `Capturas - Prolog 3.pdf` | Documento PDF que recopila evidencias de ejecución del taller en el entorno de Prolog. |
+| `Capturas - Prolog 3.pdf` | Documento PDF que recopila evidencias de ejecución del programa en Prolog. |
 | `capturas/1.png` | Captura de consultas sobre `xp_acumulada/2`, `puede_aceptar/2` y `tiene_requerido/2`. |
 | `capturas/2.png` | Captura que muestra el error de comparación aritmética con variable no instanciada y el uso correcto de `is/2`. |
 | `capturas/3.png` | Captura de consultas sobre fusión de inventarios, conjugación del verbo `ser`, generación de reporte individual y pruebas de igualdad. |
